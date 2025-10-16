@@ -55,5 +55,6 @@ Cambiamos el valor del parámetro user de guest al usuario que encontramos en el
 Al cargar la nueva URL, el servidor devuelve el perfil del usuario admin, que incluye la flag.
 ![admin](assets/img/TryHackMe/Neighbour/admin.png)
 
+
 Se encontró la flag aprovechando una vulnerabilidad de IDOR en el parámetro user tras una autenticación exitosa.
 - `flag{66be95c478473d91a5358f2440c7af1f}`
